@@ -1,4 +1,5 @@
 from Tkinter import *
+import time
 
 class Application(Frame):
     def start_simulation(self):
@@ -24,7 +25,6 @@ class Application(Frame):
         self.draw_board(30)
 
     def draw_board(self, size):
-    	self.w = Canvas(self, width = 250, height=250)
     	length = (self.w.winfo_reqwidth()-2)/size
     	for i in range(size):
     		for j in range(size):
@@ -32,12 +32,20 @@ class Application(Frame):
     				self.w.create_rectangle(i*length, j*length, (i+1)*length,(j+1)*length, fill="blue")
     			else:
     				self.w.create_rectangle(i*length, j*length, (i+1)*length,(j+1)*length, fill="red")
-    	self.w.pack()
+        time.sleep(0.1)
+
+    def sayhi(self):
+        print "hello"
+        time.sleep(0.1)
+        self.sayhi()
 
     def __init__(self, master=None):
         Frame.__init__(self, master)
         self.pack()
+        self.w = Canvas(self, width = 250, height=250)
         self.createWidgets()
+        self.w.pack()
+        self.after(0, self.sayhi)
 
 root = Tk()
 app = Application(master=root)
