@@ -78,6 +78,42 @@ def is_same_kind(k, n):
     else:
         return 0
 
+def calculate_poss_individual_satisfation(m, l, c, v):
+    n_m = len(m)
+    count = 0
+    sm = 0
+    if l - 1 >= 0:
+        count += is_not_empty_spot(m[l - 1][c])
+        sm += is_same_kind(m[l - 1][c], v)
+
+        if c - 1 >= 0:
+            count += is_not_empty_spot(m[l - 1][c - 1])
+            sm += is_same_kind(m[l - 1][c - 1], v)
+        if c + 1 < n_m:
+            count += is_not_empty_spot(m[l - 1][c + 1])
+            sm += is_same_kind(m[l - 1][c + 1], v)
+    if l + 1 < n_m:
+        count += is_not_empty_spot(m[l + 1][c])
+        sm += is_same_kind(m[l + 1][c], v)
+
+        if c - 1 >= 0:
+            count += is_not_empty_spot(m[l + 1][c - 1])
+            sm += is_same_kind(m[l + 1][c - 1], v)
+        if c + 1 < n_m:
+            count += is_not_empty_spot(m[l + 1][c + 1])
+            sm += is_same_kind(m[l + 1][c + 1], v)
+    if c - 1 >= 0:
+        count += is_not_empty_spot(m[l][c - 1])
+        sm += is_same_kind(m[l][c - 1], v)
+    if c + 1 < n_m:
+        count += is_not_empty_spot(m[l][c + 1])
+        sm += is_same_kind(m[l][c + 1], v)
+
+    if count == 0:
+        return 1
+    else:
+        return float(sm)/count
+
 def calculate_individual_satisfation(m, l, c):
     n_m = len(m)
     count = 0
@@ -172,6 +208,27 @@ def get_nearest_empty(e, n, l, c):
 
     return i
 
+def get_best_satisfation(m, e, l, c):
+    b = 0
+    for e_i, e_v in enumerate(e):
+        b_t = calculate_poss_individual_satisfation(m, e_v[0], e_v[1], m[l][c])
+        if b_t > b:
+            i = e_i
+            b = b_t
+
+    return i
+
+def moving_to_best(m, s):
+    e = get_empty_spots(m)
+
+    for s_i in s:
+        e_i = get_best_satisfation(m, e, s_i[0], s_i[1])
+        m[ e[e_i][0] ][ e[e_i][1] ] = m[ s_i[0] ][ s_i[1] ]
+        m[ s_i[0] ][ s_i[1] ] = -1
+        e[e_i] = (s_i[0], s_i[1])
+
+    return m
+
 def moving_to_nearest(m, s):
     e = get_empty_spots_with_past(m)
     n_m = len(m)
@@ -185,7 +242,7 @@ def moving_to_nearest(m, s):
     return m
 
 def moving_to_random(m, s):
-    e = get_empty_spots_array(m)
+    e = get_empty_spots(m)
 
     for s_i in s:
         r = randint(0, len(e) - 1)
@@ -204,7 +261,7 @@ def main():
     s = calculate_satisfation(m, 0.7, 1)
 
     while len(s) > 0:
-        m = moving_to_nearest(m, s)
+        m = moving_to_best(m, s)
         it += 1
         s = calculate_satisfation(m, 0.7, 1)
         print 'it: {}'.format(it)
