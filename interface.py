@@ -269,7 +269,7 @@ class Application(Frame):
 
         self.it = 0
         while len(self.s) > 0:
-            self.m = moving_to_best(self.m, self.s)
+            self.m = moving_to_random(self.m, self.s)
             self.it += 1
             self.s = calculate_satisfation(self.m, 0.7, 1)
             print 'it: {}'.format(self.it)
@@ -285,7 +285,7 @@ class Application(Frame):
 
         self.m = generate_matrix(50)
         self.m = populate_matrix(self.m, 2, [0.5, 0.5], 250)
-
+        print self.m
         self.s = calculate_satisfation(self.m, 0.7, 1)
         self.draw_board(self.m)
 
@@ -304,16 +304,20 @@ class Application(Frame):
 
     def draw_board(self, m):
         print "Drawing board"
+        self.w.delete(ALL)
     	length = (self.w.winfo_reqwidth()-2)/len(self.m)
     	for i in range(len(self.m)):
     		for j in range(len(self.m)):
-    			if(m[i][j]==1):
-    				self.w.create_rectangle(i*length, j*length, (i+1)*length,(j+1)*length, fill="blue")
-    			elif(m[i][j]==-1):
-    				self.w.create_rectangle(i*length, j*length, (i+1)*length,(j+1)*length, fill="red")
-                else:
-                    self.w.create_rectangle(i*length, j*length, (i+1)*length,(j+1)*length, fill="yellow")
+				if(m[i][j]==0):
+					self.w.create_rectangle(j*length, i*length, (j+1)*length,(i+1)*length, fill="blue")
+				elif(m[i][j]==1):
+					self.w.create_rectangle(j*length, i*length, (j+1)*length,(i+1)*length, fill="red")
+				elif(m[i][j]==-1):
+					self.w.create_rectangle(j*length, i*length, (j+1)*length,(i+1)*length, fill="white")
+				else:
+					print "error"
         self.w.update()
+
     def __init__(self, master=None):
         Frame.__init__(self, master)
         self.pack()
