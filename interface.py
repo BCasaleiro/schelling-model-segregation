@@ -266,28 +266,31 @@ class Application(Frame):
     def start_simulation(self):
         self.startB['state'] = 'disabled'
         print "Starting Simulation"
+
         self.it = 0
+        while len(self.s) > 0:
+            self.m = moving_to_best(self.m, self.s)
+            self.it += 1
+            self.s = calculate_satisfation(self.m, 0.7, 1)
+            print 'it: {}'.format(self.it)
+
+            self.after(0, self.draw_board(self.m))
+            time.sleep(0.5)
+
+        self.startB['state'] = 'normal'
+
+    def reset_simulation(self):
+        self.startB['state'] = "normal"
+        print "Reseting Simulation"
 
         self.m = generate_matrix(50)
         self.m = populate_matrix(self.m, 2, [0.5, 0.5], 250)
 
         self.s = calculate_satisfation(self.m, 0.7, 1)
-
-        while len(self.s) > 0:
-            self.m = moving_to_best(self.m, self.s)
-            #self.draw_board(self.m)
-            self.after(0, self.draw_board(self.m))
-            self.it += 1
-            self.s = calculate_satisfation(self.m, 0.7, 1)
-            print 'it: {}'.format(self.it)
-            time.sleep(0.5)
-        self.startB['state'] = 'normal'
-
-    def reset_simulation(self):
-        print "Reseting Simulation"
+        self.draw_board(self.m)
 
     def createWidgets(self):
-        self.startB = Button(self, text='Start', command=self.start_simulation)
+        self.startB = Button(self, text='Start', command=self.start_simulation, state="disabled")
         self.resetB = Button(self, text='Reset', command=self.reset_simulation)
 
         self.redblueScroll = Scale(self, orient=HORIZONTAL, label="Red/Blue Prob")
