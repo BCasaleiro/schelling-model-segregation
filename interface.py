@@ -266,38 +266,60 @@ class Application(Frame):
         self.startB['state'] = 'disabled'
         print "Starting Simulation"
 
-        self.it = 0
+        self.s = calculate_satisfation(self.m, 0.75, 1)
+        self.satisf = 1 - float(len(self.s)) / (len(self.m) * len(self.m))
         while len(self.s) > 0:
             self.m = moving_to_random(self.m, self.s)
             self.it += 1
-            self.s = calculate_satisfation(self.m, 0.7, 1)
+            self.s = calculate_satisfation(self.m, 0.75, 1)
             print 'it: {}'.format(self.it)
-
+            self.satisf = 1 - float(len(self.s)) / (len(self.m) * len(self.m))
             self.draw_board(self.m)
             time.sleep(self.stepS.get())
 
         self.startB['state'] = 'normal'
 
     def reset_simulation(self):
+        self.it = 0
+        self.satisf = 0.0
         self.startB['state'] = "normal"
         print "Reseting Simulation"
 
         self.m = generate_matrix(50)
         self.m = populate_matrix(self.m, 2, [0.5, 0.5], 250)
         print self.m
-        self.s = calculate_satisfation(self.m, 0.7, 1)
+
+        self.itM = Message(self.rightFrame, text="Iteration: "+str(self.it), width=100)
+        self.satisfM = Message(self.rightFrame, text="Satisfaction: "+str(self.satisf), width=150)
+        self.satisfM.pack(side=BOTTOM)
+        self.itM.pack(side=BOTTOM)
         self.draw_board(self.m)
 
+
     def createWidgets(self):
-        self.startB = Button(self, text='Start', command=self.start_simulation, state="disabled")
-        self.resetB = Button(self, text='Reset', command=self.reset_simulation)
+        controls = Frame(self)
+        controls.pack(side=LEFT)
 
-        self.stepS = Scale(self, orient=HORIZONTAL, label="Step", from_=0, to=2, resolution=0.1)
+        self.startB = Button(controls, text='Start', command=self.start_simulation, state="disabled")
+        self.resetB = Button(controls, text='Reset', command=self.reset_simulation)
 
-        self.stepS.pack(anchor=CENTER)
-        self.startB.pack({"side": "left"})
-        self.resetB.pack({"side": "left"})
+        self.stepS = Scale(controls, orient=HORIZONTAL, label="Delay", from_=0, to=2, resolution=0.1)
+        self.emptyS = Scale(controls, orient=HORIZONTAL, label="Empty(%)")
 
+        self.heuristics = Listbox(controls)
+        for item in ["random", "closest", "best"]:
+            self.heuristics.insert(END, item)
+        self.heuristics['state']='normal'
+
+        var = StringVar()
+        self.heuristics2 = OptionMenu(controls, var, *('train','plane'))
+        self.startB.pack(side=TOP)
+        self.resetB.pack(side=TOP)
+        self.stepS.pack(side=LEFT)
+        self.emptyS.pack(side=LEFT)
+
+        #self.heuristics.pack()
+        self.heuristics2.pack(side=BOTTOM)
 
 
     def draw_board(self, m):
@@ -314,14 +336,20 @@ class Application(Frame):
 					self.w.create_rectangle(j*length, i*length, (j+1)*length,(i+1)*length, fill="white")
 				else:
 					print "error"
+
+        self.itM.config(text=("Iteration: "+str(self.it)))
+        self.satisfM.config(text=("Satisfaction: "+str(self.satisf)))
+
         self.w.update()
 
     def __init__(self, master=None):
         Frame.__init__(self, master)
         self.pack()
-        self.w = Canvas(self, width = 250, height=250)
+        self.rightFrame = Frame(self)
+        self.rightFrame.pack(side=RIGHT)
+        self.w = Canvas(self.rightFrame, width = 350, height=350)
         self.createWidgets()
-        self.w.pack()
+        self.w.pack(side=TOP)
 
         self.mainloop();
 
