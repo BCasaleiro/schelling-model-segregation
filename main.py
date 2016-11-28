@@ -1,4 +1,5 @@
 from random import random, randint
+from math import pow, sqrt
 from time import sleep
 
 def print_matrix(m):                                                            #TODO: remove this method
@@ -128,6 +129,17 @@ def calculate_satisfation(m, l_s, m_s):
     print 'satisfaction: {} {}'.format(len(s), 1 - float(len(s)) / (n_m * n_m))
     return s
 
+def get_empty_spots_with_past(m):
+    e = []
+    n_m = len(m)
+
+    for l in range(n_m):
+        for c in range(n_m):
+            if m[l][c] == -1:
+                e.append( [l, c, -1, -1] )
+
+    return e
+
 def get_empty_spots(m):
     e = []
     n_m = len(m)
@@ -139,8 +151,41 @@ def get_empty_spots(m):
 
     return e
 
-def moving(m, s):
-    e = get_empty_spots(m)
+def get_nearest_empty_with_past(e, n, l, c):
+    d = n + 1
+    for e_i, e_v in enumerate(e):
+        if e_v[2] != l and e_v[3] != c:
+            d_t = sqrt( pow(l - e_v[0], 2) + pow(c - e_v[1], 2) )
+            if d_t < d:
+                i = e_i
+                d = d_t
+
+    return i
+
+def get_nearest_empty(e, n, l, c):
+    d = n + 1
+    for e_i, e_v in enumerate(e):
+        d_t = sqrt( pow(l - e_v[0], 2) + pow(c - e_v[1], 2) )
+        if d_t < d:
+            i = e_i
+            d = d_t
+
+    return i
+
+def moving_to_nearest(m, s):
+    e = get_empty_spots_with_past(m)
+    n_m = len(m)
+
+    for s_i in s:
+        e_i = get_nearest_empty_with_past(e, n_m, s_i[0], s_i[1])
+        m[ e[e_i][0] ][ e[e_i][1] ] = m[ s_i[0] ][ s_i[1] ]
+        m[ s_i[0] ][ s_i[1] ] = -1
+        e[e_i] = [s_i[0], s_i[1], e[e_i][0], e[e_i][1]]
+
+    return m
+
+def moving_to_random(m, s):
+    e = get_empty_spots_array(m)
 
     for s_i in s:
         r = randint(0, len(e) - 1)
@@ -159,10 +204,11 @@ def main():
     s = calculate_satisfation(m, 0.7, 1)
 
     while len(s) > 0:
-        m = moving(m, s)
+        m = moving_to_nearest(m, s)
         it += 1
         s = calculate_satisfation(m, 0.7, 1)
         print 'it: {}'.format(it)
+        # sleep(0.5)
 
 if __name__ == '__main__':
     main()
