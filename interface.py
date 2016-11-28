@@ -261,7 +261,6 @@ def main():
     root.mainloop()
 
 
-
 class Application(Frame):
     def start_simulation(self):
         self.startB['state'] = 'disabled'
@@ -274,8 +273,8 @@ class Application(Frame):
             self.s = calculate_satisfation(self.m, 0.7, 1)
             print 'it: {}'.format(self.it)
 
-            self.after(0, self.draw_board(self.m))
-            time.sleep(0.5)
+            self.draw_board(self.m)
+            time.sleep(self.stepS.get())
 
         self.startB['state'] = 'normal'
 
@@ -293,10 +292,9 @@ class Application(Frame):
         self.startB = Button(self, text='Start', command=self.start_simulation, state="disabled")
         self.resetB = Button(self, text='Reset', command=self.reset_simulation)
 
-        self.redblueScroll = Scale(self, orient=HORIZONTAL, label="Red/Blue Prob")
-        self.redblueScroll.set(50)
+        self.stepS = Scale(self, orient=HORIZONTAL, label="Step", from_=0, to=2, resolution=0.1)
 
-        self.redblueScroll.pack(anchor=CENTER)
+        self.stepS.pack(anchor=CENTER)
         self.startB.pack({"side": "left"})
         self.resetB.pack({"side": "left"})
 
