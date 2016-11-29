@@ -260,7 +260,6 @@ def main():
     app = Application(master=root)
     root.mainloop()
 
-
 class Application(Frame):
     def start_simulation(self):
         self.widgets_state_change("disabled")
@@ -277,9 +276,7 @@ class Application(Frame):
             self.satisf = 1 - float(len(self.s)) / (len(self.m) * len(self.m))
             self.draw_board(self.m)
             time.sleep(self.stepS.get())
-
         self.resetB['state'] = 'normal'
-
 
     def widgets_state_change(self, state):
         self.startB['state'] = state
@@ -394,7 +391,6 @@ class Application(Frame):
         self.satisfM.pack(side=BOTTOM)
         self.itM.pack(side=BOTTOM)
 
-
     def draw_board(self, m):
         print "Drawing board"
         self.w.delete(ALL)
@@ -415,9 +411,7 @@ class Application(Frame):
 
         self.itM.config(text=("Iteration: "+str(self.it)))
         self.satisfM.config(text=("Satisfaction: "+str(self.satisf)))
-
         self.w.update()
-
 
     def __init__(self, master=None):
         Frame.__init__(self, master)
