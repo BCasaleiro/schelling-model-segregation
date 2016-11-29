@@ -326,9 +326,13 @@ class Application(Frame):
         self.emptyS = Scale(optionsFrame, orient=HORIZONTAL, label="Empty(%)")
         self.emptyS.set(10)
 
+        heuristicFrame = Frame(optionsFrame)
+        heuristicFrame.pack(side=TOP)
         self.choice = StringVar(self)
         self.choice.set( 'random' )
-        self.heuristics = OptionMenu(optionsFrame, self.choice, *('random','best', 'closest'))
+        self.heuristics = OptionMenu(heuristicFrame, self.choice, *('random','best', 'closest'))
+        self.heurMessage = Message(heuristicFrame, text="Heuristic", width=100)
+
         self.minS = Scale(optionsFrame, orient=HORIZONTAL, label="Min", from_=0, to=1, resolution=0.05)
         self.maxS = Scale(optionsFrame, orient=HORIZONTAL, label="Max", from_=0, to=1, resolution=0.05)
         self.proportionS = Scale(optionsFrame, orient=HORIZONTAL, label="Proportion", from_=0, to=1, resolution=0.05)
@@ -341,7 +345,9 @@ class Application(Frame):
         self.sizeBoardS.set(50)
 
         #self.heuristics.pack()
-        self.heuristics.pack(side=TOP)
+        self.heurMessage.pack(side=LEFT)
+        self.heuristics.pack(side=LEFT)
+
         self.stepS.pack(side=TOP)
         self.emptyS.pack(side=TOP)
         self.minS.pack(side=TOP)
