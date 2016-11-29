@@ -257,6 +257,7 @@ def moving_to_random(m, s):
 
 def main():
     root = Tk()
+    root.wm_title("Schelling-Model-Segregation")
     app = Application(master=root)
     root.mainloop()
 
@@ -276,7 +277,9 @@ class Application(Frame):
             self.satisf = 1 - float(len(self.s)) / (len(self.m) * len(self.m))
             self.draw_board(self.m)
             time.sleep(self.stepS.get())
+
         self.resetB['state'] = 'normal'
+        self.stopB['state'] = 'disabled'
 
     def widgets_state_change(self, state):
         self.startB['state'] = state
@@ -341,9 +344,6 @@ class Application(Frame):
 
         optionsFrame = Frame(leftFrame)
         optionsFrame.pack(side=BOTTOM)
-        self.stepS = Scale(optionsFrame, orient=HORIZONTAL, label="Delay", from_=0, to=2, resolution=0.1)
-        self.emptyS = Scale(optionsFrame, orient=HORIZONTAL, label="Empty", from_=0, to=1, resolution=0.05)
-        self.emptyS.set(0.1)
 
         heuristicFrame = Frame(optionsFrame)
         heuristicFrame.pack(side=TOP)
@@ -352,10 +352,6 @@ class Application(Frame):
         self.heuristics = OptionMenu(heuristicFrame, self.choice, *('Random','Best', 'Closest'))
         self.heurMessage = Message(heuristicFrame, text="Heuristic:", width=100)
 
-        self.minS = Scale(optionsFrame, orient=HORIZONTAL, label="Min", from_=0, to=1, resolution=0.05)
-        self.maxS = Scale(optionsFrame, orient=HORIZONTAL, label="Max", from_=0, to=1, resolution=0.05)
-        self.proportionS = Scale(optionsFrame, orient=HORIZONTAL, label="Proportion", from_=0, to=1, resolution=0.05)
-        self.sizeBoardS = Scale(optionsFrame, orient=HORIZONTAL, label="Board Size")
 
         racesFrame = Frame(optionsFrame)
         racesFrame.pack(side=TOP)
@@ -366,6 +362,50 @@ class Application(Frame):
 
         self.racesMessage.pack(side=LEFT)
         self.races.pack(side=LEFT)
+
+        emptyFrame = Frame(optionsFrame)
+        emptyFrame.pack(side=TOP)
+        self.emptyS = Scale(emptyFrame, orient=HORIZONTAL, from_=0, to=1, resolution=0.05)
+        self.emptyS.set(0.1)
+        self.emptyM = Message(emptyFrame, text="Empty:", width=50)
+        self.emptyM.pack(side=LEFT)
+        self.emptyS.pack(side=LEFT)
+
+
+        delayFrame = Frame(optionsFrame)
+        delayFrame.pack(side=TOP)
+        self.stepS = Scale(delayFrame, orient=HORIZONTAL, from_=0, to=2, resolution=0.1)
+        self.stepM = Message(delayFrame, text="Delay:", width=50)
+        self.stepM.pack(side=LEFT)
+        self.stepS.pack(side=LEFT)
+
+        minFrame = Frame(optionsFrame)
+        minFrame.pack(side=TOP)
+        self.minS = Scale(minFrame, orient=HORIZONTAL, from_=0, to=1, resolution=0.05)
+        self.minM = Message(minFrame, text="Low limit:", width = 100)
+        self.minM.pack(side=LEFT)
+        self.minS.pack(side=LEFT)
+
+        maxFrame = Frame(optionsFrame)
+        maxFrame.pack(side=TOP)
+        self.maxS = Scale(maxFrame, orient=HORIZONTAL, from_=0, to=1, resolution=0.05)
+        self.maxM = Message(maxFrame, text="High limit:", width = 100)
+        self.maxM.pack(side=LEFT)
+        self.maxS.pack(side=LEFT)
+
+        propFrame = Frame(optionsFrame)
+        propFrame.pack(side=TOP)
+        self.proportionS = Scale(propFrame, orient=HORIZONTAL, from_=0, to=1, resolution=0.05)
+        self.propM = Message(propFrame, text="Proportion:", width = 100)
+        self.propM.pack(side=LEFT)
+        self.proportionS.pack(side=LEFT)
+
+        sizeFrame = Frame(optionsFrame)
+        sizeFrame.pack(side=TOP)
+        self.sizeBoardS = Scale(sizeFrame, orient=HORIZONTAL)
+        self.sizeM = Message(sizeFrame, text="Board Size:", width = 100)
+        self.sizeM.pack(side=LEFT)
+        self.sizeBoardS.pack(side=LEFT)
 
         #initialize values to default:
         self.minS.set(0.75)
@@ -378,9 +418,8 @@ class Application(Frame):
         self.heuristics.pack(side=LEFT)
 
         self.stepS.pack(side=TOP)
-        self.emptyS.pack(side=TOP)
-        self.minS.pack(side=TOP)
-        self.maxS.pack(side=TOP)
+
+
         self.proportionS.pack(side=TOP)
         self.sizeBoardS.pack(side=TOP)
 
@@ -409,6 +448,8 @@ class Application(Frame):
                     print "error"
                 self.w.create_rectangle(j*length, i*length, (j+1)*length,(i+1)*length, fill=color)
 
+        self.w.create_rectangle(1,1,350,350, width=3)
+
         self.itM.config(text=("Iteration: "+str(self.it)))
         self.satisfM.config(text=("Satisfaction: "+str(self.satisf)))
         self.w.update()
@@ -420,9 +461,9 @@ class Application(Frame):
         self.rightFrame = Frame(self)
         self.rightFrame.pack(side=RIGHT)
         self.w = Canvas(self.rightFrame, width = 350, height=350)
+        self.w.create_rectangle(1,1,350,350)
         self.createWidgets()
         self.w.pack(side=TOP)
-
         self.mainloop();
 
 if __name__ == '__main__':
