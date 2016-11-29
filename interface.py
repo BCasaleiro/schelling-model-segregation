@@ -278,7 +278,6 @@ class Application(Frame):
             self.draw_board(self.m)
             time.sleep(self.stepS.get())
 
-        self.stopped=0
         self.resetB['state'] = 'normal'
 
 
@@ -325,9 +324,9 @@ class Application(Frame):
 
     def stop_simulation(self):
         self.stopped=1
-        self.startB['state'] = ['disabled']
         self.stopB['state'] = ['disabled']
         self.widgets_state_change("normal")
+        self.startB['state'] = ['disabled']
 
     def createWidgets(self):
         leftFrame = Frame(self)
