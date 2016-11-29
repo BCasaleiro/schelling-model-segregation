@@ -278,7 +278,8 @@ class Application(Frame):
             self.draw_board(self.m)
             time.sleep(self.stepS.get())
 
-        self.resetB['state'] = 'normal'
+        self.widgets_state_change("normal")
+        self.startB['state'] = 'disabled'
         self.stopB['state'] = 'disabled'
 
     def widgets_state_change(self, state):
