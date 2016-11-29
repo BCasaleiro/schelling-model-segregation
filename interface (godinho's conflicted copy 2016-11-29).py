@@ -277,7 +277,6 @@ class Application(Frame):
             self.draw_board(self.m)
             time.sleep(self.stepS.get())
 
-        self.stopped=0
         self.startB['state'] = 'normal'
 
     def choose_method(self):
@@ -303,7 +302,10 @@ class Application(Frame):
         self.draw_board(self.m)
 
     def stop_simulation(self):
-        self.stopped=1
+        if(self.stopped==1):
+            self.stopped=0
+        else:
+            self.stopped=1
 
     def createWidgets(self):
         leftFrame = Frame(self)
@@ -319,20 +321,25 @@ class Application(Frame):
         self.resetB.pack(side=LEFT)
         self.stopB.pack(side=LEFT)
 
-
-        optionsFrame = Frame(leftFrame)
-        optionsFrame.pack(side=BOTTOM)
-        self.stepS = Scale(optionsFrame, orient=HORIZONTAL, label="Delay", from_=0, to=2, resolution=0.1)
-        self.emptyS = Scale(optionsFrame, orient=HORIZONTAL, label="Empty(%)")
+        self.stepS = Scale(leftFrame, orient=HORIZONTAL, label="Delay", from_=0, to=2, resolution=0.1)
+        self.emptyS = Scale(leftFrame, orient=HORIZONTAL, label="Empty(%)")
         self.emptyS.set(10)
+        # self.heuristics = Listbox(controls)
+        # for item in ["random", "closest", "best"]:
+        #     self.heuristics.insert(END, item)
+        # self.heuristics['state']='normal'
+
+        self.stepS.pack(side=BOTTOM)
+        self.emptyS.pack(side=BOTTOM)
+
 
         self.choice = StringVar(self)
         self.choice.set( 'random' )
-        self.heuristics = OptionMenu(optionsFrame, self.choice, *('random','best', 'closest'))
-        self.minS = Scale(optionsFrame, orient=HORIZONTAL, label="Min", from_=0, to=1, resolution=0.05)
-        self.maxS = Scale(optionsFrame, orient=HORIZONTAL, label="Max", from_=0, to=1, resolution=0.05)
-        self.proportionS = Scale(optionsFrame, orient=HORIZONTAL, label="Proportion", from_=0, to=1, resolution=0.05)
-        self.sizeBoardS = Scale(optionsFrame, orient=HORIZONTAL, label="Board Size")
+        self.heuristics = OptionMenu(leftFrame, self.choice, *('random','best', 'closest'))
+        self.minS = Scale(leftFrame, orient=HORIZONTAL, label="Min", from_=0, to=1, resolution=0.05)
+        self.maxS = Scale(leftFrame, orient=HORIZONTAL, label="Max", from_=0, to=1, resolution=0.05)
+        self.proportionS = Scale(leftFrame, orient=HORIZONTAL, label="Proportion", from_=0, to=1, resolution=0.05)
+        self.sizeBoardS = Scale(leftFrame, orient=HORIZONTAL, label="Board Size")
 
         #initialize values to default:
         self.minS.set(0.75)
@@ -341,13 +348,11 @@ class Application(Frame):
         self.sizeBoardS.set(50)
 
         #self.heuristics.pack()
-        self.heuristics.pack(side=TOP)
-        self.stepS.pack(side=TOP)
-        self.emptyS.pack(side=TOP)
-        self.minS.pack(side=TOP)
-        self.maxS.pack(side=TOP)
-        self.proportionS.pack(side=TOP)
-        self.sizeBoardS.pack(side=TOP)
+        self.heuristics.pack(side=BOTTOM)
+        self.minS.pack(side=BOTTOM)
+        self.maxS.pack(side=BOTTOM)
+        self.proportionS.pack(side=BOTTOM)
+        self.sizeBoardS.pack(side=BOTTOM)
 
 
 
