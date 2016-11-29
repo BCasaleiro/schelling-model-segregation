@@ -1,3 +1,6 @@
+from Tkinter import *
+import time
+
 from random import random, randint
 from math import pow, sqrt
 from time import sleep
@@ -253,19 +256,216 @@ def moving_to_random(m, s):
     return m
 
 def main():
-    it = 0
+    root = Tk()
+    root.wm_title("Schelling-Model-Segregation")
+    app = Application(master=root)
+    root.mainloop()
 
-    m = generate_matrix(50)
-    m = populate_matrix(m, 2, [0.5, 0.5], 250)
+class Application(Frame):
+    def start_simulation(self):
+        self.widgets_state_change("disabled")
+        self.stopB['state'] = 'normal'
+        print "Starting Simulation"
 
-    s = calculate_satisfation(m, 0.7, 1)
+        self.s = calculate_satisfation(self.m, self.minS.get(), self.maxS.get())
+        self.satisf = 1 - float(len(self.s)) / (len(self.m) * len(self.m))
+        while len(self.s) > 0 and self.stopped==0:
+            self.choose_method()
+            self.it += 1
+            self.s = calculate_satisfation(self.m, self.minS.get(), self.maxS.get())
+            print 'it: {}'.format(self.it)
+            self.satisf = 1 - float(len(self.s)) / (len(self.m) * len(self.m))
+            self.draw_board(self.m)
+            time.sleep(self.stepS.get())
 
-    while len(s) > 0:
-        m = moving_to_best(m, s)
-        it += 1
-        s = calculate_satisfation(m, 0.7, 1)
-        print 'it: {}'.format(it)
-        # sleep(0.5)
+        self.widgets_state_change("normal")
+        self.startB['state'] = 'disabled'
+        self.stopB['state'] = 'disabled'
+
+    def widgets_state_change(self, state):
+        self.startB['state'] = state
+        self.resetB['state'] = state
+        self.emptyS['state'] = state
+        self.maxS['state'] = state
+        self.minS['state'] = state
+        self.proportionS['state'] = state
+        self.stepS['state'] = state
+        self.heuristics['state'] = state
+        self.races['state'] = state
+        self.sizeBoardS['state'] = state
+
+
+    def choose_method(self):
+        method = self.choice.get()
+        if(method=="Random"):
+            self.m = moving_to_random(self.m, self.s)
+        elif(method=="Best"):
+            self.m = moving_to_best(self.m, self.s)
+        elif(method=="Closest"):
+            self.m = moving_to_nearest(self.m, self.s)
+
+    def reset_simulation(self):
+        self.it = 0
+        self.satisf = 0.0
+        self.stopped=0
+
+        self.startB['state'] = "normal"
+        self.stopB['state'] = 'disabled'
+        print "Reseting Simulation"
+
+        numEmptySpaces = int(self.sizeBoardS.get()*self.sizeBoardS.get()*self.emptyS.get())
+        self.m = generate_matrix(self.sizeBoardS.get())
+
+        if(self.numRaces.get()=="2"):
+            self.m = populate_matrix(self.m, 2, [self.proportionS.get(), 1-self.proportionS.get()], numEmptySpaces)
+        else:
+            self.m = populate_matrix(self.m, 3, [0.33,0.33,0.33], numEmptySpaces)
+
+        self.draw_board(self.m)
+
+    def stop_simulation(self):
+        self.stopped=1
+        self.stopB['state'] = ['disabled']
+        self.widgets_state_change("normal")
+        self.startB['state'] = ['disabled']
+
+    def createWidgets(self):
+        leftFrame = Frame(self)
+        leftFrame.pack(side=LEFT)
+
+        actionsFrame = Frame(leftFrame, bd=15)
+        actionsFrame.pack(side=TOP)
+        self.startB = Button(actionsFrame, text='Start', font="bold", command=self.start_simulation, state="disabled")
+        self.resetB = Button(actionsFrame, text='Reset', font="bold", command=self.reset_simulation)
+        self.stopB = Button(actionsFrame, text='Stop', font="bold", command=self.stop_simulation)
+
+        self.startB.pack(side=LEFT)
+        self.resetB.pack(side=LEFT)
+        self.stopB.pack(side=LEFT)
+
+        optionsFrame = Frame(leftFrame)
+        optionsFrame.pack(side=BOTTOM)
+
+        heuristicFrame = Frame(optionsFrame)
+        heuristicFrame.pack(side=TOP)
+        self.choice = StringVar(self)
+        self.choice.set('Random')
+        self.heuristics = OptionMenu(heuristicFrame, self.choice, *('Random','Best', 'Closest'))
+        self.heurMessage = Message(heuristicFrame, text="Heuristic:", width=100)
+
+
+        racesFrame = Frame(optionsFrame)
+        racesFrame.pack(side=TOP)
+        self.numRaces = StringVar(self)
+        self.numRaces.set('2')
+        self.races = OptionMenu(racesFrame, self.numRaces, *('2', '3'))
+        self.racesMessage = Message(racesFrame, text="Number of Races:", width=200)
+
+        self.racesMessage.pack(side=LEFT)
+        self.races.pack(side=LEFT)
+
+        emptyFrame = Frame(optionsFrame)
+        emptyFrame.pack(side=TOP)
+        self.emptyS = Scale(emptyFrame, orient=HORIZONTAL, from_=0, to=1, resolution=0.05)
+        self.emptyS.set(0.1)
+        self.emptyM = Message(emptyFrame, text="Empty:", width=50)
+        self.emptyM.pack(side=LEFT)
+        self.emptyS.pack(side=LEFT)
+
+
+        delayFrame = Frame(optionsFrame)
+        delayFrame.pack(side=TOP)
+        self.stepS = Scale(delayFrame, orient=HORIZONTAL, from_=0, to=2, resolution=0.1)
+        self.stepM = Message(delayFrame, text="Delay:", width=50)
+        self.stepM.pack(side=LEFT)
+        self.stepS.pack(side=LEFT)
+
+        minFrame = Frame(optionsFrame)
+        minFrame.pack(side=TOP)
+        self.minS = Scale(minFrame, orient=HORIZONTAL, from_=0, to=1, resolution=0.05)
+        self.minM = Message(minFrame, text="Low limit:", width = 100)
+        self.minM.pack(side=LEFT)
+        self.minS.pack(side=LEFT)
+
+        maxFrame = Frame(optionsFrame)
+        maxFrame.pack(side=TOP)
+        self.maxS = Scale(maxFrame, orient=HORIZONTAL, from_=0, to=1, resolution=0.05)
+        self.maxM = Message(maxFrame, text="High limit:", width = 100)
+        self.maxM.pack(side=LEFT)
+        self.maxS.pack(side=LEFT)
+
+        propFrame = Frame(optionsFrame)
+        propFrame.pack(side=TOP)
+        self.proportionS = Scale(propFrame, orient=HORIZONTAL, from_=0, to=1, resolution=0.05)
+        self.propM = Message(propFrame, text="Proportion:", width = 100)
+        self.propM.pack(side=LEFT)
+        self.proportionS.pack(side=LEFT)
+
+        sizeFrame = Frame(optionsFrame)
+        sizeFrame.pack(side=TOP)
+        self.sizeBoardS = Scale(sizeFrame, orient=HORIZONTAL)
+        self.sizeM = Message(sizeFrame, text="Board Size:", width = 100)
+        self.sizeM.pack(side=LEFT)
+        self.sizeBoardS.pack(side=LEFT)
+
+        #initialize values to default:
+        self.minS.set(0.75)
+        self.maxS.set(1)
+        self.proportionS.set(0.5)
+        self.sizeBoardS.set(50)
+
+        #self.heuristics.pack()
+        self.heurMessage.pack(side=LEFT)
+        self.heuristics.pack(side=LEFT)
+
+        self.stepS.pack(side=TOP)
+
+
+        self.proportionS.pack(side=TOP)
+        self.sizeBoardS.pack(side=TOP)
+
+        self.it = 0.0
+        self.satisf = 0.0
+        self.itM = Message(self.rightFrame, text="Iteration: "+str(self.it), width=100)
+        self.satisfM = Message(self.rightFrame, text="Satisfaction: "+str(self.satisf), width=150)
+        self.satisfM.pack(side=BOTTOM)
+        self.itM.pack(side=BOTTOM)
+
+    def draw_board(self, m):
+        print "Drawing board"
+        self.w.delete(ALL)
+        length = float(self.w.winfo_reqwidth()-2)/len(self.m)
+        for i in range(len(self.m)):
+            for j in range(len(self.m)):
+                if(m[i][j]==0):
+                    color="blue"
+                elif(m[i][j]==1):
+                    color="red"
+                elif(m[i][j]==2):
+                    color="yellow"
+                elif(m[i][j]==-1):
+                    color="white"
+                else:
+                    print "error"
+                self.w.create_rectangle(j*length, i*length, (j+1)*length,(i+1)*length, fill=color)
+
+        self.w.create_rectangle(1,1,350,350, width=3)
+
+        self.itM.config(text=("Iteration: "+str(self.it)))
+        self.satisfM.config(text=("Satisfaction: "+str(self.satisf)))
+        self.w.update()
+
+    def __init__(self, master=None):
+        Frame.__init__(self, master)
+        self.stopped = 0
+        self.pack()
+        self.rightFrame = Frame(self)
+        self.rightFrame.pack(side=RIGHT)
+        self.w = Canvas(self.rightFrame, width = 350, height=350)
+        self.w.create_rectangle(1,1,350,350)
+        self.createWidgets()
+        self.w.pack(side=TOP)
+        self.mainloop();
 
 if __name__ == '__main__':
     main()
