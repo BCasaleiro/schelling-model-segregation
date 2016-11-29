@@ -332,11 +332,11 @@ class Application(Frame):
         leftFrame = Frame(self)
         leftFrame.pack(side=LEFT)
 
-        actionsFrame = Frame(leftFrame)
+        actionsFrame = Frame(leftFrame, bd=15)
         actionsFrame.pack(side=TOP)
-        self.startB = Button(actionsFrame, text='Start', command=self.start_simulation, state="disabled")
-        self.resetB = Button(actionsFrame, text='Reset', command=self.reset_simulation)
-        self.stopB = Button(actionsFrame, text='Stop', command=self.stop_simulation)
+        self.startB = Button(actionsFrame, text='Start', font="bold", command=self.start_simulation, state="disabled")
+        self.resetB = Button(actionsFrame, text='Reset', font="bold", command=self.reset_simulation)
+        self.stopB = Button(actionsFrame, text='Stop', font="bold", command=self.stop_simulation)
 
         self.startB.pack(side=LEFT)
         self.resetB.pack(side=LEFT)
@@ -433,7 +433,7 @@ class Application(Frame):
     def draw_board(self, m):
         print "Drawing board"
         self.w.delete(ALL)
-        length = (self.w.winfo_reqwidth()-2)/len(self.m)
+        length = float(self.w.winfo_reqwidth()-2)/len(self.m)
         for i in range(len(self.m)):
             for j in range(len(self.m)):
                 if(m[i][j]==0):
