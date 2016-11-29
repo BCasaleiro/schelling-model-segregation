@@ -266,12 +266,12 @@ class Application(Frame):
         self.startB['state'] = 'disabled'
         print "Starting Simulation"
 
-        self.s = calculate_satisfation(self.m, 0.75, 1)
+        self.s = calculate_satisfation(self.m, self.minS.get(), self.maxS.get())
         self.satisf = 1 - float(len(self.s)) / (len(self.m) * len(self.m))
-        while len(self.s) > 0:
-            self.m = moving_to_random(self.m, self.s)
+        while len(self.s) > 0 and self.stopped==0:
+            self.choose_method()
             self.it += 1
-            self.s = calculate_satisfation(self.m, 0.75, 1)
+            self.s = calculate_satisfation(self.m, self.minS.get(), self.maxS.get())
             print 'it: {}'.format(self.it)
             self.satisf = 1 - float(len(self.s)) / (len(self.m) * len(self.m))
             self.draw_board(self.m)
@@ -279,22 +279,33 @@ class Application(Frame):
 
         self.startB['state'] = 'normal'
 
+    def choose_method(self):
+        method = self.choice.get()
+        if(method=="random"):
+            self.m = moving_to_random(self.m, self.s)
+        elif(method=="best"):
+            self.m = moving_to_best(self.m, self.s)
+        elif(method=="closest"):
+            self.m = moving_to_nearest(self.m, self.s)
+
     def reset_simulation(self):
         self.it = 0
         self.satisf = 0.0
         self.startB['state'] = "normal"
         print "Reseting Simulation"
 
-        self.m = generate_matrix(50)
-        self.m = populate_matrix(self.m, 2, [0.5, 0.5], 250)
+        self.m = generate_matrix(self.sizeBoardS.get())
+        self.m = populate_matrix(self.m, 2, [self.proportionS.get(), 1-self.proportionS.get()], 250)
         print self.m
 
-        self.itM = Message(self.rightFrame, text="Iteration: "+str(self.it), width=100)
-        self.satisfM = Message(self.rightFrame, text="Satisfaction: "+str(self.satisf), width=150)
-        self.satisfM.pack(side=BOTTOM)
-        self.itM.pack(side=BOTTOM)
+
         self.draw_board(self.m)
 
+    def stop_simulation(self):
+        if(self.stopped==1):
+            self.stopped=0
+        else:
+            self.stopped=1
 
     def createWidgets(self):
         controls = Frame(self)
@@ -302,24 +313,51 @@ class Application(Frame):
 
         self.startB = Button(controls, text='Start', command=self.start_simulation, state="disabled")
         self.resetB = Button(controls, text='Reset', command=self.reset_simulation)
+        self.stopB = Button(controls, text='Stop', command=self.stop_simulation)
 
         self.stepS = Scale(controls, orient=HORIZONTAL, label="Delay", from_=0, to=2, resolution=0.1)
         self.emptyS = Scale(controls, orient=HORIZONTAL, label="Empty(%)")
-
-        self.heuristics = Listbox(controls)
-        for item in ["random", "closest", "best"]:
-            self.heuristics.insert(END, item)
-        self.heuristics['state']='normal'
-
-        var = StringVar()
-        self.heuristics2 = OptionMenu(controls, var, *('train','plane'))
+        self.emptyS.set(10)
+        # self.heuristics = Listbox(controls)
+        # for item in ["random", "closest", "best"]:
+        #     self.heuristics.insert(END, item)
+        # self.heuristics['state']='normal'
         self.startB.pack(side=TOP)
         self.resetB.pack(side=TOP)
+        self.stopB.pack(side=TOP)
         self.stepS.pack(side=LEFT)
         self.emptyS.pack(side=LEFT)
 
+
+        self.choice = StringVar(self)
+        self.choice.set( 'random' )
+        self.heuristics = OptionMenu(controls, self.choice, *('random','best', 'closest'))
+        self.minS = Scale(controls, orient=HORIZONTAL, label="Min", from_=0, to=1, resolution=0.05)
+        self.maxS = Scale(controls, orient=HORIZONTAL, label="Max", from_=0, to=1, resolution=0.05)
+        self.proportionS = Scale(controls, orient=HORIZONTAL, label="Proportion", from_=0, to=1, resolution=0.05)
+        self.sizeBoardS = Scale(controls, orient=HORIZONTAL, label="Board Size")
+
+        #initialize values to default:
+        self.minS.set(0.75)
+        self.maxS.set(1)
+        self.proportionS.set(0.5)
+        self.sizeBoardS.set(50)
+
         #self.heuristics.pack()
-        self.heuristics2.pack(side=BOTTOM)
+        self.heuristics.pack(side=TOP)
+        self.minS.pack(side=BOTTOM)
+        self.maxS.pack(side=BOTTOM)
+        self.proportionS.pack(side=BOTTOM)
+        self.sizeBoardS.pack(side=BOTTOM)
+
+
+
+        self.it = 0.0
+        self.satisf = 0.0
+        self.itM = Message(self.rightFrame, text="Iteration: "+str(self.it), width=100)
+        self.satisfM = Message(self.rightFrame, text="Satisfaction: "+str(self.satisf), width=150)
+        self.satisfM.pack(side=BOTTOM)
+        self.itM.pack(side=BOTTOM)
 
 
     def draw_board(self, m):
@@ -342,8 +380,10 @@ class Application(Frame):
 
         self.w.update()
 
+
     def __init__(self, master=None):
         Frame.__init__(self, master)
+        self.stopped = 0
         self.pack()
         self.rightFrame = Frame(self)
         self.rightFrame.pack(side=RIGHT)
