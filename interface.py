@@ -263,7 +263,8 @@ def main():
 
 class Application(Frame):
     def start_simulation(self):
-        self.startB['state'] = 'disabled'
+        self.widgets_state_change("disabled")
+        self.stopB['state'] = 'normal'
         print "Starting Simulation"
 
         self.s = calculate_satisfation(self.m, self.minS.get(), self.maxS.get())
@@ -278,7 +279,21 @@ class Application(Frame):
             time.sleep(self.stepS.get())
 
         self.stopped=0
-        self.startB['state'] = 'normal'
+        self.resetB['state'] = 'normal'
+
+
+    def widgets_state_change(self, state):
+        self.startB['state'] = state
+        self.resetB['state'] = state
+        self.emptyS['state'] = state
+        self.maxS['state'] = state
+        self.minS['state'] = state
+        self.proportionS['state'] = state
+        self.stepS['state'] = state
+        self.heuristics['state'] = state
+        self.races['state'] = state
+        self.sizeBoardS['state'] = state
+
 
     def choose_method(self):
         method = self.choice.get()
@@ -292,7 +307,10 @@ class Application(Frame):
     def reset_simulation(self):
         self.it = 0
         self.satisf = 0.0
+        self.stopped=0
+
         self.startB['state'] = "normal"
+        self.stopB['state'] = 'disabled'
         print "Reseting Simulation"
 
         numEmptySpaces = int(self.sizeBoardS.get()*self.sizeBoardS.get()*self.emptyS.get())
@@ -307,6 +325,9 @@ class Application(Frame):
 
     def stop_simulation(self):
         self.stopped=1
+        self.startB['state'] = ['disabled']
+        self.stopB['state'] = ['disabled']
+        self.widgets_state_change("normal")
 
     def createWidgets(self):
         leftFrame = Frame(self)
@@ -321,7 +342,6 @@ class Application(Frame):
         self.startB.pack(side=LEFT)
         self.resetB.pack(side=LEFT)
         self.stopB.pack(side=LEFT)
-
 
         optionsFrame = Frame(leftFrame)
         optionsFrame.pack(side=BOTTOM)
@@ -351,7 +371,6 @@ class Application(Frame):
         self.racesMessage.pack(side=LEFT)
         self.races.pack(side=LEFT)
 
-
         #initialize values to default:
         self.minS.set(0.75)
         self.maxS.set(1)
@@ -368,8 +387,6 @@ class Application(Frame):
         self.maxS.pack(side=TOP)
         self.proportionS.pack(side=TOP)
         self.sizeBoardS.pack(side=TOP)
-
-
 
         self.it = 0.0
         self.satisf = 0.0
