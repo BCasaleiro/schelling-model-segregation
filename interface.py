@@ -282,11 +282,11 @@ class Application(Frame):
 
     def choose_method(self):
         method = self.choice.get()
-        if(method=="random"):
+        if(method=="Random"):
             self.m = moving_to_random(self.m, self.s)
-        elif(method=="best"):
+        elif(method=="Best"):
             self.m = moving_to_best(self.m, self.s)
-        elif(method=="closest"):
+        elif(method=="Closest"):
             self.m = moving_to_nearest(self.m, self.s)
 
     def reset_simulation(self):
@@ -295,10 +295,13 @@ class Application(Frame):
         self.startB['state'] = "normal"
         print "Reseting Simulation"
 
+        numEmptySpaces = int(self.sizeBoardS.get()*self.sizeBoardS.get()*self.emptyS.get())
         self.m = generate_matrix(self.sizeBoardS.get())
-        self.m = populate_matrix(self.m, 2, [self.proportionS.get(), 1-self.proportionS.get()], 250)
-        print self.m
 
+        if(self.numRaces.get()=="2"):
+            self.m = populate_matrix(self.m, 2, [self.proportionS.get(), 1-self.proportionS.get()], numEmptySpaces)
+        else:
+            self.m = populate_matrix(self.m, 3, [0.33,0.33,0.33], numEmptySpaces)
 
         self.draw_board(self.m)
 
@@ -323,20 +326,31 @@ class Application(Frame):
         optionsFrame = Frame(leftFrame)
         optionsFrame.pack(side=BOTTOM)
         self.stepS = Scale(optionsFrame, orient=HORIZONTAL, label="Delay", from_=0, to=2, resolution=0.1)
-        self.emptyS = Scale(optionsFrame, orient=HORIZONTAL, label="Empty(%)")
-        self.emptyS.set(10)
+        self.emptyS = Scale(optionsFrame, orient=HORIZONTAL, label="Empty", from_=0, to=1, resolution=0.05)
+        self.emptyS.set(0.1)
 
         heuristicFrame = Frame(optionsFrame)
         heuristicFrame.pack(side=TOP)
         self.choice = StringVar(self)
-        self.choice.set( 'random' )
-        self.heuristics = OptionMenu(heuristicFrame, self.choice, *('random','best', 'closest'))
-        self.heurMessage = Message(heuristicFrame, text="Heuristic", width=100)
+        self.choice.set('Random')
+        self.heuristics = OptionMenu(heuristicFrame, self.choice, *('Random','Best', 'Closest'))
+        self.heurMessage = Message(heuristicFrame, text="Heuristic:", width=100)
 
         self.minS = Scale(optionsFrame, orient=HORIZONTAL, label="Min", from_=0, to=1, resolution=0.05)
         self.maxS = Scale(optionsFrame, orient=HORIZONTAL, label="Max", from_=0, to=1, resolution=0.05)
         self.proportionS = Scale(optionsFrame, orient=HORIZONTAL, label="Proportion", from_=0, to=1, resolution=0.05)
         self.sizeBoardS = Scale(optionsFrame, orient=HORIZONTAL, label="Board Size")
+
+        racesFrame = Frame(optionsFrame)
+        racesFrame.pack(side=TOP)
+        self.numRaces = StringVar(self)
+        self.numRaces.set('2')
+        self.races = OptionMenu(racesFrame, self.numRaces, *('2', '3'))
+        self.racesMessage = Message(racesFrame, text="Number of Races:", width=200)
+
+        self.racesMessage.pack(side=LEFT)
+        self.races.pack(side=LEFT)
+
 
         #initialize values to default:
         self.minS.set(0.75)
@@ -368,17 +382,20 @@ class Application(Frame):
     def draw_board(self, m):
         print "Drawing board"
         self.w.delete(ALL)
-    	length = (self.w.winfo_reqwidth()-2)/len(self.m)
-    	for i in range(len(self.m)):
-    		for j in range(len(self.m)):
-				if(m[i][j]==0):
-					self.w.create_rectangle(j*length, i*length, (j+1)*length,(i+1)*length, fill="blue")
-				elif(m[i][j]==1):
-					self.w.create_rectangle(j*length, i*length, (j+1)*length,(i+1)*length, fill="red")
-				elif(m[i][j]==-1):
-					self.w.create_rectangle(j*length, i*length, (j+1)*length,(i+1)*length, fill="white")
-				else:
-					print "error"
+        length = (self.w.winfo_reqwidth()-2)/len(self.m)
+        for i in range(len(self.m)):
+            for j in range(len(self.m)):
+                if(m[i][j]==0):
+                    color="blue"
+                elif(m[i][j]==1):
+                    color="red"
+                elif(m[i][j]==2):
+                    color="yellow"
+                elif(m[i][j]==-1):
+                    color="white"
+                else:
+                    print "error"
+                self.w.create_rectangle(j*length, i*length, (j+1)*length,(i+1)*length, fill=color)
 
         self.itM.config(text=("Iteration: "+str(self.it)))
         self.satisfM.config(text=("Satisfaction: "+str(self.satisf)))
