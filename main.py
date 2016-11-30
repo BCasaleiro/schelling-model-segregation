@@ -165,7 +165,7 @@ def calculate_satisfation(m, l_s, m_s):
                 if sat < l_s or sat > m_s:
                     s.append( (l, c) )
     print 'mean satisfaction: {}'.format(float(mean_s) / (n_m * n_m))
-    print 'satisfaction: {} {}'.format(len(s), 1 - float(len(s)) / (n_m * n_m))
+    #print 'satisfaction: {} {}'.format(len(s), 1 - float(len(s)) / (n_m * n_m))
     return s
 
 def get_empty_spots_with_past(m):
@@ -257,7 +257,7 @@ def moving_to_random(m, s):
 
 def main():
     root = Tk()
-    root.wm_title("Schelling-Model-Segregation")
+    root.wm_title("Schelling Model Segregation")
     app = Application(master=root)
     root.mainloop()
 
@@ -366,7 +366,7 @@ class Application(Frame):
 
         emptyFrame = Frame(optionsFrame)
         emptyFrame.pack(side=TOP)
-        self.emptyS = Scale(emptyFrame, orient=HORIZONTAL, from_=0, to=1, resolution=0.05)
+        self.emptyS = Scale(emptyFrame, orient=HORIZONTAL, from_=0, to=1, resolution=0.005)
         self.emptyS.set(0.1)
         self.emptyM = Message(emptyFrame, text="Empty:", width=50)
         self.emptyM.pack(side=LEFT)
@@ -382,7 +382,7 @@ class Application(Frame):
 
         minFrame = Frame(optionsFrame)
         minFrame.pack(side=TOP)
-        self.minS = Scale(minFrame, orient=HORIZONTAL, from_=0, to=1, resolution=0.05)
+        self.minS = Scale(minFrame, orient=HORIZONTAL, from_=0, to=1, resolution=0.005)
         self.minM = Message(minFrame, text="Low limit:", width = 100)
         self.minM.pack(side=LEFT)
         self.minS.pack(side=LEFT)
@@ -438,11 +438,11 @@ class Application(Frame):
         for i in range(len(self.m)):
             for j in range(len(self.m)):
                 if(m[i][j]==0):
-                    color="blue"
+                    color="green"
                 elif(m[i][j]==1):
-                    color="red"
+                    color="orange"
                 elif(m[i][j]==2):
-                    color="yellow"
+                    color="blue"
                 elif(m[i][j]==-1):
                     color="white"
                 else:
