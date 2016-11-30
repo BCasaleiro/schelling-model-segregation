@@ -1,9 +1,14 @@
 from Tkinter import *
 import time
+import plotly
+import plotly.plotly as py
+import plotly.graph_objs as go
 
 from random import random, randint
 from math import pow, sqrt
 from time import sleep
+
+mean_s = 0.0
 
 def print_matrix(m):                                                            #TODO: remove this method
     for i in m:
@@ -156,16 +161,18 @@ def calculate_individual_satisfation(m, l, c):
 def calculate_satisfation(m, l_s, m_s):
     n_m = len(m)
     s = []
-    mean_s = 0
+    mea_s = 0
     for l in range(n_m):
         for c in range(n_m):
             if(m[l][c] != -1):
                 sat = calculate_individual_satisfation(m, l, c)
-                mean_s += sat
+                mea_s += sat
                 if sat < l_s or sat > m_s:
                     s.append( (l, c) )
-    print 'mean satisfaction: {}'.format(float(mean_s) / (n_m * n_m))
-    print 'satisfaction: {} {}'.format(len(s), 1 - float(len(s)) / (n_m * n_m))
+    global mean_s
+    mean_s = float(mea_s) / (n_m * n_m)
+    # print 'mean satisfaction: {}'.format(mean_s)
+    # print 'satisfaction: {} {}'.format(len(s), 1 - float(len(s)) / (n_m * n_m))
     return s
 
 def get_empty_spots_with_past(m):
@@ -255,7 +262,54 @@ def moving_to_random(m, s):
 
     return m
 
+def plot():
+    mx = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
+    # mz = [[0 for x in range(10)] for y in range(10)]
+    #
+    # for xi, x in enumerate(mx):
+    #     for yi, y in enumerate(mx):
+    #         if y > x:
+    #             m = generate_matrix(50)
+    #             m = populate_matrix(m, 2, [0.50,0.50], 250)
+    #             it = 0
+    #             s = calculate_satisfation(m, x, y)
+    #             while len(s) > 0:
+    #                 m = moving_to_random(m, s)
+    #                 s = calculate_satisfation(m, x, y)
+    #                 it += 1
+    #                 if it > 1000:
+    #                     break
+    #         else:
+    #             global mean_s
+    #             mean_s = 0
+    #         mz[xi][yi] = float(mean_s)
+    #         print '({},{})\t{}'.format(x, y, mz[xi][yi])
+    #     break
+
+    mz = [
+        [0.0, 0.4508647619047619, 0.4496752380952378, 0.3560033333333331, 0.3014742857142886, 0.3337709523809551, 0.3711800000000024, 0.41911666666666697, 0.44966190476190443, 0.4754123809523805],
+        [0.0, 0.0, 0.450681904761904, 0.433738571428572, 0.3460419047619064, 0.33059857142857246, 0.3805328571428591, 0.42845380952380974, 0.49392761904761956, 0.509778095238096],
+        [0.0, 0.0, 0.0, 0.44562476190476136, 0.4388652380952384, 0.44037285714285773, 0.4526504761904761, 0.5025661904761891, 0.5621900000000012, 0.6882757142857162],
+        [0.0, 0.0, 0.0, 0.0, 0.4565504761904761, 0.45610761904761865, 0.4767585714285714, 0.5154728571428577, 0.6016885714285748, 0.7458323809523839],
+        [0.0, 0.0, 0.0, 0.0, 0.0, 0.4572161904761909, 0.4691385714285705, 0.5160771428571425, 0.5944390476190496, 0.8015219047619059],
+        [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.4582071428571421, 0.5062747619047607, 0.5961104761904776, 0.8844371428571418],
+        [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.46510666666666695, 0.49884714285714316, 0.9001599999999996],
+        [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.44835904761904793, 0.47232476190476225],
+        [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.45494714285714327],
+        [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+        ]
+
+    data = [
+    go.Contour(
+        z = mz,
+        x = mx,
+        y = mx
+    )]
+
+    py.iplot(data)
+
 def main():
+    # plot()
     root = Tk()
     root.wm_title("Schelling-Model-Segregation")
     app = Application(master=root)
@@ -298,7 +352,7 @@ class Application(Frame):
     def choose_method(self):
         method = self.choice.get()
         if(method=="Random"):
-            self.m = moving_to_random(self.m, self.s)
+            self.moving_to_random(self.m, self.s)
         elif(method=="Best"):
             self.m = moving_to_best(self.m, self.s)
         elif(method=="Closest"):
@@ -468,4 +522,5 @@ class Application(Frame):
         self.mainloop();
 
 if __name__ == '__main__':
+    plotly.tools.set_credentials_file(username='bcasaleiro', api_key='VRnrNNTYpWjkbCFgxZ9w')
     main()
