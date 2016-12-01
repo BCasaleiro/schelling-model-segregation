@@ -44,6 +44,8 @@ Our main purpose is to discover the threshold where there is an high or low segr
 
 For this project we decided to continue to use the same language as our first project, so we used \href{https://www.python.org}{Python}. To build the interface we used \href{https://wiki.python.org/moin/TkInter}{Tkinter}, and to draw the graphs (contour plot) we used \href{https://plot.ly/}{plotly}.
 
+\newpage
+
 \section{Implementation}
 
 \subsection{Heuristics}
@@ -58,15 +60,18 @@ In this heuristic an agent is placed on an empty space where he will be satisfie
 \subsubsection{Closest}
 In this heuristic an agent is placed on the closest empty space. In order to avoid that an agent is always switching between two spaces, each agent has a memory that keeps track of the last empty space he has been to.
 
+\newpage
+
 \subsection{Variables}
 In our interface is possible to change all variables necessary to run the simulation:
 
-\textit{ \textbf{Interface Variables} }
 
 \begin{figure}[h]
     \centering
     \includegraphics[scale=0.50]{img/interface.png}
 \end{figure}
+
+\textit{ \textbf{Interface Variables} }
 
 \begin{description}
 \item [ Heuristic ] (Random or Best or Closest) \textbf{-} heuristic used for simulation
@@ -78,6 +83,8 @@ In our interface is possible to change all variables necessary to run the simula
 \item [ Delay ] (0.0-2.0) \textbf{-} time between each iteration
 \item [ Board Size ] (0-100) \textbf{-} size of the simulation board
 \end{description}
+
+\newpage 
 
 \section{Results}
 
