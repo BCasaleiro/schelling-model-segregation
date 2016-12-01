@@ -353,7 +353,7 @@ class Application(Frame):
     def choose_method(self):
         method = self.choice.get()
         if(method=="Random"):
-            self.moving_to_random(self.m, self.s)
+            self.m = moving_to_random(self.m, self.s)
         elif(method=="Best"):
             self.m = moving_to_best(self.m, self.s)
         elif(method=="Closest"):
@@ -429,7 +429,7 @@ class Application(Frame):
 
         minFrame = Frame(optionsFrame)
         minFrame.pack(side=TOP)
-        self.minS = Scale(minFrame, orient=HORIZONTAL, from_=0, to=1, resolution=0.005)
+        self.minS = Scale(minFrame, orient=HORIZONTAL, from_=0, to=1, resolution=0.05)
         self.minM = Message(minFrame, text="Low limit:", width = 100)
         self.minM.pack(side=LEFT)
         self.minS.pack(side=LEFT)
@@ -454,7 +454,7 @@ class Application(Frame):
         self.stepM = Message(delayFrame, text="Delay:", width=50)
         self.stepM.pack(side=LEFT)
         self.stepS.pack(side=LEFT)
-        
+
         sizeFrame = Frame(optionsFrame)
         sizeFrame.pack(side=TOP)
         self.sizeBoardS = Scale(sizeFrame, orient=HORIZONTAL)
