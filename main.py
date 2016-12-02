@@ -353,7 +353,7 @@ class Application(Frame):
     def choose_method(self):
         method = self.choice.get()
         if(method=="Random"):
-            self.moving_to_random(self.m, self.s)
+            self.m = moving_to_random(self.m, self.s)
         elif(method=="Best"):
             self.m = moving_to_best(self.m, self.s)
         elif(method=="Closest"):
