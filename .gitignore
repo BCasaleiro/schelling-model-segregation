@@ -3,3 +3,7 @@
 
 # Report files
 *.pdf
+*.log
+*.fls
+*.synctex.gz
+*.fdb_latexmk
