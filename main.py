@@ -324,12 +324,14 @@ class Application(Frame):
 
         self.s = calculate_satisfation(self.m, self.minS.get(), self.maxS.get())
         self.satisf = 1 - float(len(self.s)) / (len(self.m) * len(self.m))
+        self.segreg = float(mean_s)
         while len(self.s) > 0 and self.stopped==0:
             self.choose_method()
             self.it += 1
             self.s = calculate_satisfation(self.m, self.minS.get(), self.maxS.get())
             print 'it: {}'.format(self.it)
             self.satisf = 1 - float(len(self.s)) / (len(self.m) * len(self.m))
+            self.segreg = float(mean_s)
             self.draw_board(self.m)
             time.sleep(self.stepS.get())
 
@@ -362,6 +364,7 @@ class Application(Frame):
     def reset_simulation(self):
         self.it = 0
         self.satisf = 0.0
+        self.segreg = 0.0
         self.stopped=0
 
         self.startB['state'] = "normal"
@@ -481,8 +484,11 @@ class Application(Frame):
 
         self.it = 0.0
         self.satisf = 0.0
+        self.segreg = 0.0
         self.itM = Message(self.rightFrame, text="Iteration: "+str(self.it), width=100)
         self.satisfM = Message(self.rightFrame, text="Satisfaction: "+str(self.satisf), width=150)
+        self.segregM = Message(self.rightFrame, text="Segregation: " +str(self.segreg), width=150)
+        self.segregM.pack(side=BOTTOM)
         self.satisfM.pack(side=BOTTOM)
         self.itM.pack(side=BOTTOM)
 
@@ -507,7 +513,8 @@ class Application(Frame):
         self.w.create_rectangle(1,1,350,350, width=3)
 
         self.itM.config(text=("Iteration: "+str(self.it)))
-        self.satisfM.config(text=("Satisfaction: "+str(self.satisf)))
+        self.satisfM.config(text="Satisfaction: {:6.6f}".format(self.satisf))
+        self.segregM.config(text="Segregation: {:6.6f}".format(self.segreg))
         self.w.update()
 
     def __init__(self, master=None):
