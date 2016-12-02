@@ -111,14 +111,14 @@ In our interface is possible to change all variables necessary to run the simula
 \begin{figure}[h]
     \centering
     \includegraphics[scale=0.40]{img/ploty.png}
-    \caption{Countour Plot of the minimum (y axis) and maximum (x axis) limits.}
+    \caption{Countour Plot of the minimum (y axis) and maximum (x axis) limits with 250 empty spaces}
 \end{figure}
 
-As we can see in Figure 1 there is obviously a limit (see \textbf{Figure 2}) where the segregation spikes only beeing
-decreased when lowering the maximum limit. This is the threshold we were looking for.
+As we can see in Figure 1 there is obviously a limit (see \textbf{Figure 2}) where the segregation spikes only decreasing
+when lowering the maximum limit. This is the threshold we were looking for.
 
 By analysing the countour plot we can notice that if we fix the maximum limit at 100\% and increase the mininum limit when
-it reaches $0.4$ the segregation increases sizably even though the agents don't mind beeing near 60\% of agents from other
+it reaches $0.4$ the segregation increases sizably even though the agents don't mind being near 60\% of agents from other
 race they choose to segregate themselves.
 
 On the other hand when it reaches $0.75$ and above it becomes impossible to satisfy all the agents of a sample with 2
@@ -126,7 +126,7 @@ equiprobable races. For this values nothing can be concluded because when the ag
 keeping the segregation at aproximatelly 50\%. This is only possible to assume because when generating the countour plot
 it was used a sample population with 2 equiprobable races.
 
-We also convluded that if we lower the maximum limit the segregation will be lower but it will be also more difficult to
+We also concluded that if we lower the maximum limit the segregation will be lower but it will be also more difficult to
 satisfy all agents and will almost always be some unsatisfied ones.
 
 \begin{figure}[h]
@@ -134,6 +134,25 @@ satisfy all agents and will almost always be some unsatisfied ones.
     \includegraphics[scale=0.40]{img/ploty-a.png}
     \caption{Same Countour Plot of Figure 1 but with the minimum $0.4$ highlighted.}
 \end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.50]{img/500emptyspaces.png}
+    \caption{Countour Plot of the minimum (y axis) and maximum (x axis) limits with 500 empty spaces}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.50]{img/3races75empty.png}
+    \caption{Countour Plot of the minimum (y axis) and maximum (x axis) limits with 75 empty spaces and three races}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.50]{img/3races150empty.png}
+    \caption{Countour Plot of the minimum (y axis) and maximum (x axis) limits with 150 empty spaces and three races}
+\end{figure}
+
 
 \newpage
 

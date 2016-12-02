@@ -264,30 +264,34 @@ def moving_to_random(m, s):
     return m
 
 def plot():
-    mx = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
-    # mz = [[0 for x in range(10)] for y in range(10)]
-    #
-    # for xi, x in enumerate(mx):
-    #     for yi, y in enumerate(mx):
-    #         if y > x:
-    #             m = generate_matrix(50)
-    #             m = populate_matrix(m, 2, [0.50,0.50], 250)
-    #             it = 0
-    #             s = calculate_satisfation(m, x, y)
-    #             while len(s) > 0:
-    #                 m = moving_to_random(m, s)
-    #                 s = calculate_satisfation(m, x, y)
-    #                 it += 1
-    #                 if it > 1000:
-    #                     break
-    #         else:
-    #             global mean_s
-    #             mean_s = 0
-    #         mz[xi][yi] = float(mean_s)
-    #         print '({},{})\t{}'.format(x, y, mz[xi][yi])
-    #     break
 
-    mz = [
+ #    mx = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
+ #    my = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
+ #    mz = [[0 for x in range(10)] for y in range(10)]
+    
+ #    for x in range(len(mx)):
+ #        for y in range(len(mx)):
+	# 		global mean_s
+	# 		mean_s = 0.0
+	# 		if y > x:
+	# 			m = generate_matrix(50)
+	# 			m = populate_matrix(m, 3, [0.33,0.33,0.33], 75)
+	# 			it = 0
+	# 			s = calculate_satisfation(m, mx[x], my[y])
+	# 			while len(s) > 0:
+	# 				m = moving_to_random(m, s)
+	# 				s = calculate_satisfation(m, mx[x], my[y])
+	# 				it += 1
+	# 				if it > 1000:
+	# 					break
+	# 			mz[x][y] = float(mean_s)
+	# 			print mean_s
+	# 		else:
+	# 			mz[x][y] = float(mean_s)
+	# 			print '({},{})\t{}'.format(mx[x], my[y], mz[x][y])
+
+	# print mz
+	mz = [
         [0.0, 0.4508647619047619, 0.4496752380952378, 0.3560033333333331, 0.3014742857142886, 0.3337709523809551, 0.3711800000000024, 0.41911666666666697, 0.44966190476190443, 0.4754123809523805],
         [0.0, 0.0, 0.450681904761904, 0.433738571428572, 0.3460419047619064, 0.33059857142857246, 0.3805328571428591, 0.42845380952380974, 0.49392761904761956, 0.509778095238096],
         [0.0, 0.0, 0.0, 0.44562476190476136, 0.4388652380952384, 0.44037285714285773, 0.4526504761904761, 0.5025661904761891, 0.5621900000000012, 0.6882757142857162],
@@ -307,10 +311,10 @@ def plot():
         y = mx
     )]
 
-    py.iplot(data)
+    py.plot(data)
 
 def main():
-    # plot()
+    #plot()
     root = Tk()
     root.wm_title("Schelling Model Segregation")
     app = Application(master=root)
