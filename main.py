@@ -427,17 +427,9 @@ class Application(Frame):
         self.emptyM.pack(side=LEFT)
         self.emptyS.pack(side=LEFT)
 
-
-        delayFrame = Frame(optionsFrame)
-        delayFrame.pack(side=TOP)
-        self.stepS = Scale(delayFrame, orient=HORIZONTAL, from_=0, to=2, resolution=0.1)
-        self.stepM = Message(delayFrame, text="Delay:", width=50)
-        self.stepM.pack(side=LEFT)
-        self.stepS.pack(side=LEFT)
-
         minFrame = Frame(optionsFrame)
         minFrame.pack(side=TOP)
-        self.minS = Scale(minFrame, orient=HORIZONTAL, from_=0, to=1, resolution=0.005)
+        self.minS = Scale(minFrame, orient=HORIZONTAL, from_=0, to=1, resolution=0.05)
         self.minM = Message(minFrame, text="Low limit:", width = 100)
         self.minM.pack(side=LEFT)
         self.minS.pack(side=LEFT)
@@ -456,12 +448,20 @@ class Application(Frame):
         self.propM.pack(side=LEFT)
         self.proportionS.pack(side=LEFT)
 
+        delayFrame = Frame(optionsFrame)
+        delayFrame.pack(side=TOP)
+        self.stepS = Scale(delayFrame, orient=HORIZONTAL, from_=0, to=2, resolution=0.1)
+        self.stepM = Message(delayFrame, text="Delay:", width=50)
+        self.stepM.pack(side=LEFT)
+        self.stepS.pack(side=LEFT)
+
         sizeFrame = Frame(optionsFrame)
         sizeFrame.pack(side=TOP)
         self.sizeBoardS = Scale(sizeFrame, orient=HORIZONTAL)
         self.sizeM = Message(sizeFrame, text="Board Size:", width = 100)
         self.sizeM.pack(side=LEFT)
         self.sizeBoardS.pack(side=LEFT)
+
 
         #initialize values to default:
         self.minS.set(0.75)
