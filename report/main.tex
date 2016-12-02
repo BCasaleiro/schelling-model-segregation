@@ -1,6 +1,6 @@
 \documentclass[a4paper,titlepage,11pt]{article}
 
-\usepackage[top=2.54cm, bottom=2.54cm, left=2.54cm, right=2.54cm]{geometry}
+% \usepackage[top=2.54cm, bottom=2.54cm, left=2.54cm, right=2.54cm]{geometry}
 \usepackage[utf8x]{inputenc}
 \usepackage{hyperref}
 \usepackage{graphicx}
@@ -38,33 +38,55 @@
 \end{titlepage}
 
 \section{Introduction}
-For this project we had to create and analyze the Schelling's Model. This model has the purpose of studying the segregation of races over time showing that when agents don't mind being surrounded by agents of a different race, they will yet aggrupate themselves from other agents over time.
+Thomas Schelling is an American economist and professor at the School of Public Policy at University of Maryland.
+In 1971 he created an agent-based model to help explain how segregation emerges and why is it so difficult to combat.
+This model has the purpose of studying the segregation of races over time showing that even when agents don't mind
+being surrounded by agents of a different race, they will yet segregate themselves from other agents over time.
 
-Our main purpose is to discover the threshold where there is an high or low segregation level.
+For this project we replicated and analyzed the Schelling's Model. Our main goal was to discover the threshold
+where individuals are confortable with other races in their neighborhood and the end result of this variable.
 
-We decided to continue to use the same language as our first project, so we used \href{https://www.python.org}{Python}. To build the interface we used \href{https://wiki.python.org/moin/TkInter}{Tkinter}, and to draw the graphs (contour plot) we used \href{https://plot.ly/}{plotly}.
+We decided to continue to use the same language as our first project. So we used \href{https://www.python.org}{Python}.
+To build the interface we used \href{https://wiki.python.org/moin/TkInter}{Tkinter},
+and to draw the graphs (contour plot) we used \href{https://plot.ly/}{plotly}.
 
 \newpage
 
 \section{Implementation}
+At the start a matrix is initialized and populated with all the individuals and the empty spots.
+This will be the matrix where all the operations will happen.
+
+Then we enter a simple iterative cycle that runs until either all the individuals reach the goal satisfaction
+\footnote{Satisfaction: An individual has a lower and upper boundary that establish the minimum and maximum
+percentage of individuals with his race in the neighborhood. If this limits are respected the individual is considered
+satisfied.}
+or a barrier is reached and it is not possible to satisfy all individuals. This cycle has 3 steps:
+
+\begin{description}
+\item [ Calculate Satisfaction ] Calculates the satisfaction for every individual and return a list with all the unsatisfied ones.
+\item [ Calculate Empty Spaces ] Returns a list of all the empty spaces.
+\item [ Move the Unsatisfied Individuals ] Moves all the unsatisfied individuals to one of the empty spaces available.
+\end{description}
 
 \subsection{Heuristics}
-There were three heuristics created: Random, Best, Closest.
+There were three heuristics implemented: Random, Best, Closest.
 
 \subsubsection{Random}
-In this Heuristic an agent is randomly placed on an empty space.
+The agent is randomly placed on an empty space available.
 
 \subsubsection{Best}
-In this heuristic an agent is placed on an empty space where he will be satisfied.
+The satisfation of the agent is calculated for each empty space.
+Placing the agent in the empty space that provides the best fit.
 
 \subsubsection{Closest}
-In this heuristic an agent is placed on the closest empty space. In order to avoid that an agent is always switching between two spaces, each agent has a memory that keeps track of the last empty space he has been to.
+The agent is placed on the closest empty space.
+In order to avoid that an agent is always switching between two spaces,
+each agent has a memory that keeps track of the last empty space he has been to.
 
 \newpage
 
 \subsection{Variables}
 In our interface is possible to change all variables necessary to run the simulation:
-
 
 \begin{figure}[h]
     \centering
@@ -84,7 +106,7 @@ In our interface is possible to change all variables necessary to run the simula
 \item [ Board Size ] (0-100) \textbf{-} size of the simulation board
 \end{description}
 
-\newpage 
+\newpage
 
 \section{Results}
 
@@ -96,7 +118,7 @@ In our interface is possible to change all variables necessary to run the simula
   \item[Python] \href{https://www.python.org}{www.python.org}
   \item[Tkinter] \href{https://wiki.python.org/moin/TkInter}{www.wiki.python.org/moin/TkInter}
   \item[plotly] \href{https://plot.ly/}{www.plot.ly}
-  \item[Schelling's Model of Segregation] \href{http://nifty.stanford.edu/2014/mccown-schelling-model-segregation/}{www.nifty.stanford.edu/2014/mccownschellingmodelsegregation/}
+  \item[Schelling's Model of Segregation] \href{http://nifty.stanford.edu/2014/mccown-schelling-model-segregation/}{www.nifty.stanford.edu/2014/mccown...}
   \item[Parable of the polygons: A playable post on the shape of society] \href{http://ncase.me/polygons/}{www.case.me/polygons}
 \end{description}
 
