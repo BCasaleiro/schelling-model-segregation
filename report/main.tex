@@ -44,7 +44,7 @@ This model has the purpose of studying the segregation of races over time showin
 being surrounded by agents of a different race, they will yet segregate themselves from other agents over time.
 
 For this project we replicated and analyzed the Schelling's Model. Our main goal was to discover the threshold
-where individuals are confortable with other races in their neighborhood and the end result of this variable.
+where agents are confortable with other races in their neighborhood and the end result of this variable.
 
 We decided to continue to use the same language as our first project. So we used \href{https://www.python.org}{Python}.
 To build the interface we used \href{https://wiki.python.org/moin/TkInter}{Tkinter},
@@ -53,19 +53,19 @@ and to draw the graphs (contour plot) we used \href{https://plot.ly/}{plotly}.
 \newpage
 
 \section{Implementation}
-At the start a matrix is initialized and populated with all the individuals and the empty spots.
+At the start a matrix is initialized and populated with all the agents and empty spots.
 This will be the matrix where all the operations will happen.
 
-Then we enter a simple iterative cycle that runs until either all the individuals reach the goal satisfaction
-\footnote{Satisfaction: An individual has a lower and upper boundary that establish the minimum and maximum
-percentage of individuals with his race in the neighborhood. If this limits are respected the individual is considered
+Then we enter a simple iterative cycle that runs until either all the agents reach the goal satisfaction
+\footnote{Satisfaction: An agent has a lower and upper boundary that establish the minimum and maximum
+percentage of agents with his race in the neighborhood. If this limits are respected the agent is considered
 satisfied.}
-or a barrier is reached and it is not possible to satisfy all individuals. This cycle has 3 steps:
+or a barrier is reached and it is not possible to satisfy all agents. This cycle has 3 steps:
 
 \begin{description}
-\item [ Calculate Satisfaction ] Calculates the satisfaction for every individual and return a list with all the unsatisfied ones.
+\item [ Calculate Satisfaction ] Calculates the satisfaction for every agent and return a list with all the unsatisfied ones.
 \item [ Calculate Empty Spaces ] Returns a list of all the empty spaces.
-\item [ Move the Unsatisfied Individuals ] Moves all the unsatisfied individuals to one of the empty spaces available.
+\item [ Move the Unsatisfied agents ] Moves all the unsatisfied agents to one of the empty spaces available.
 \end{description}
 
 \subsection{Heuristics}
@@ -113,6 +113,28 @@ In our interface is possible to change all variables necessary to run the simula
 \begin{figure}[h]
     \centering
     \includegraphics[scale=0.40]{img/ploty.png}
+    \caption{Countour Plot of the minimum (y axis) and maximum (x axis) limits.}
+\end{figure}
+
+As we can see in Figure 1 there is obviously a limit (see \textbf{Figure 2}) where the segregation spikes only beeing
+decreased when lowering the maximum limit. This is the threshold we were looking for.
+
+By analysing the countour plot we can notice that if we fix the maximum limit at 100\% and increase the mininum limit when
+it reaches $0.4$ the segregation increases sizably even though the agents don't mind beeing near 60\% of agents from other
+race they choose to segregate themselves.
+
+On the other hand when it reaches $0.75$ and above it becomes impossible to satisfy all the agents of a sample with 2
+equiprobable races. For this values nothing can be concluded because when the agents can't be satisfied they remain moving
+keeping the segregation at aproximatelly 50\%. This is only possible to assume because when generating the countour plot
+it was used a sample population with 2 equiprobable races.
+
+We also convluded that if we lower the maximum limit the segregation will be lower but it will be also more difficult to
+satisfy all agents and will almost always be some unsatisfied ones.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.40]{img/ploty-a.png}
+    \caption{Same Countour Plot of Figure 1 but with the minimum $0.4$ highlighted.}
 \end{figure}
 
 \newpage
@@ -124,7 +146,7 @@ In our interface is possible to change all variables necessary to run the simula
   \item[Tkinter] \href{https://wiki.python.org/moin/TkInter}{www.wiki.python.org/moin/TkInter}
   \item[plotly] \href{https://plot.ly/}{www.plot.ly}
   \item[Schelling's Model of Segregation] \href{http://nifty.stanford.edu/2014/mccown-schelling-model-segregation/}{www.nifty.stanford.edu/2014/mccown...}
-  \item[Parable of the polygons: A playable post on the shape of society] \href{http://ncase.me/polygons/}{www.case.me/polygons}
+  \item[Parable of the polygons: A playable post on the shape of society] \href{http://ncase.me/polygons/}{www.ncase.me/polygons}
 \end{description}
 
 \newpage
