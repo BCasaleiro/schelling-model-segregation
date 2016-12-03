@@ -314,11 +314,11 @@ def plot():
     py.plot(data)
 
 def main():
-    plot()
-    # root = Tk()
-    # root.wm_title("Schelling Model Segregation")
-    # app = Application(master=root)
-    # root.mainloop()
+    # plot()
+    root = Tk()
+    root.wm_title("Schelling Model Segregation")
+    app = Application(master=root)
+    root.mainloop()
 
 class Application(Frame):
     def start_simulation(self):
