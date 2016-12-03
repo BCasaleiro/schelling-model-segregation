@@ -60,7 +60,7 @@ Then we enter a simple iterative cycle that runs until either all the agents rea
 \footnote{Satisfaction: An agent has a lower and upper boundary that establish the minimum and maximum
 percentage of agents with his race in the neighborhood. If this limits are respected the agent is considered
 satisfied.}
-or a barrier is reached and it is not possible to satisfy all agents. 
+or a barrier is reached and it is not possible to satisfy all agents.
 This cycle has 3 steps:
 
 \begin{description}
@@ -126,7 +126,7 @@ By analysing the countour plot we can notice that if we fix the maximum limit at
 it reaches 40\% the segregation increases sizably even though the agents don't mind being near 60\% of agents from other
 race they choose to segregate themselves.
 
-On the other hand when it reaches $0.75$ and above it becomes impossible to satisfy all the agents of a sample with 2
+On the other hand when it reaches 75\% and above it becomes impossible to satisfy all the agents of a sample with 2
 equiprobable races. For this values nothing can be concluded because when the agents can't be satisfied they remain moving
 keeping the segregation at aproximatelly 50\%. This is only possible to assume because when generating the countour plot
 it was used a sample population with 2 equiprobable races.
@@ -137,7 +137,7 @@ satisfy all agents and will almost always exist some unsatisfied ones.
 \begin{figure}[!h]
     \centering
     \includegraphics[scale=0.40]{img/ploty-a.png}
-    \caption{Same Countour Plot of Figure 1 but with the minimum $0.4$ highlighted.}
+    \caption{Same Countour Plot of Figure 1 but with the minimum 40\% and the maximum 90\% highlighted.}
 \end{figure}
 
 \newpage
@@ -148,7 +148,7 @@ satisfy all agents and will almost always exist some unsatisfied ones.
     \caption{Countour Plot of 2 races with 500 empty spaces}
 \end{figure}
 
-In this experience we modified the empty spaces from 250 to 500, to see if that would change the value of segregation. 
+In this experience we modified the empty spaces from 250 to 500, to see if that would change the value of segregation.
 
 We can conclude that it didn't changed too much from our previous experience, maintaining an higher segregation near the minimum between 40\% and 70\% and the maximum at 90\%.
 
@@ -156,12 +156,12 @@ We can conclude that it didn't changed too much from our previous experience, ma
 
 \begin{figure}[!h]
     \centering
-    \includegraphics[scale=0.40]{img/3races75empty.png}
-    \includegraphics[scale=0.40]{img/3races150empty.png}
+    \includegraphics[scale=0.50]{img/3races75empty.png}
+    \includegraphics[scale=0.50]{img/3races150empty.png}
     \caption{Countour Plot of 3 races with 75 (top) and 150 (bottom) empty spaces}
 \end{figure}
 
-In this experience we changed the number of races from two to three and the empty spaces number to 75 and 150. 
+In this experience we changed the number of races from two to three and the empty spaces number to 75 and 150.
 
 In both experiences the results were similar and we verified that the segregation level is more continuous, passing through all the spectrum of values of segregation.
 

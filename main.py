@@ -268,18 +268,18 @@ def plot():
     mx = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
     my = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
     mz = [[0 for x in range(10)] for y in range(10)]
-    
+
     for x in range(len(mx)):
         for y in range(len(mx)):
 			global mean_s
 			mean_s = 0.0
 			if y > x:
 				m = generate_matrix(50)
-				m = populate_matrix(m, 2, [0.5,0.5], 250)
+				m = populate_matrix(m, 3, [0.33,0.33,0.34], 75)
 				it = 0
 				s = calculate_satisfation(m, mx[x], my[y])
 				while len(s) > 0:
-					m = moving_to_best(m, s)
+					m = moving_to_random(m, s)
 					s = calculate_satisfation(m, mx[x], my[y])
 					it += 1
 					if it > 1000:
@@ -315,10 +315,10 @@ def plot():
 
 def main():
     plot()
-    root = Tk()
-    root.wm_title("Schelling Model Segregation")
-    app = Application(master=root)
-    root.mainloop()
+    # root = Tk()
+    # root.wm_title("Schelling Model Segregation")
+    # app = Application(master=root)
+    # root.mainloop()
 
 class Application(Frame):
     def start_simulation(self):
